@@ -10,6 +10,11 @@
 
 #include "types.h"
 
+/*******************************************************/
+/**************** Public Definitions *******************/
+/*******************************************************/
+
+/*comment:numbers to be displayed*/
 #define SSD_u8NUM0 0
 #define SSD_u8NUM1 1
 #define SSD_u8NUM2 2
@@ -21,7 +26,7 @@
 #define SSD_u8NUM8 8
 #define SSD_u8NUM9 9
 
-//6 7segments mapped to port number
+/*comment:7seg index*/
 #define SSD_u8DISP1 0
 #define SSD_u8DISP2 1
 #define SSD_u8DISP3 2
@@ -30,15 +35,17 @@
 #define SSD_u8DISP6 5
 
 
-
-
-//if maslan w a3mal set or clear bit :D
+/*comment:7segment type*/
 #define SSD_u8COMMONANODE 0
 #define SSD_u8COMMONCATHODE 1
 
-//
+/*comment:first 7seg state*/
 #define SSD_u8ONSTATE 1
 #define SSD_u8OFFSTATE 0
+
+/*******************************************************/
+/***********************Public Functions ***************/
+/*******************************************************/
 
 extern u8 SSD_u8Display(u8 Copy_u8DispIdx,u8 Copy_u8DispVAl);
 

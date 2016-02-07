@@ -8,18 +8,23 @@
 #ifndef SSD_CONFIG_H_
 #define SSD_CONFIG_H_
 
+
+/*******************************************************/
+/**************Configuration per Display ***************/
+/*******************************************************/
+
 #define SSD_u8DISPCNT 2
 
 
-//common andoe wla cathode
+/*comment:common andoe or cathode*/
 #define SSD_u8DISP1TYPE SSD_u8COMMONCATHODE
-#define SSD_u8DISP2TYPE SSD_u8COMMONCATHODE
+#define SSD_u8DISP2TYPE SSD_u8COMMONANODE
 #define SSD_u8DISP3TYPE SSD_u8COMMONCATHODE
 #define SSD_u8DISP4TYPE SSD_u8COMMONCATHODE
 #define SSD_u8DISP5TYPE SSD_u8COMMONCATHODE
 #define SSD_u8DISP6TYPE SSD_u8COMMONCATHODE
 
-//init number dispalyed on each
+/*comment:init value per display 0:9 */
 #define SSD_u8DISPINITVAL1 SSD_u8NUM0
 #define SSD_u8DISPINITVAL2 SSD_u8NUM0
 #define SSD_u8DISPINITVAL3 SSD_u8NUM0
@@ -27,7 +32,7 @@
 #define SSD_u8DISPINITVAL5 SSD_u8NUM0
 #define SSD_u8DISPINITVAL6 SSD_u8NUM0
 
-//on wla off
+/*comment:initial state on\off */
 #define SSD_u8DISPINITSTATE1 SSD_u8ONSTATE
 #define SSD_u8DISPINITSTATE2 SSD_u8ONSTATE
 #define SSD_u8DISPINITSTATE3 SSD_u8ONSTATE
@@ -36,8 +41,7 @@
 #define SSD_u8DISPINITSTATE6 SSD_u8ONSTATE
 
 
-//pin connected to commmon from DIO
-
+/*comment:pins connected to display1*/
 #define SSD_u8DISP1SEGA DIO_u8PIN0
 #define SSD_u8DISP1SEGB DIO_u8PIN1
 #define SSD_u8DISP1SEGC DIO_u8PIN2
@@ -47,8 +51,7 @@
 #define SSD_u8DISP1SEGG DIO_u8PIN6
 #define SSD_u8DISP1COMM DIO_u8PIN7
 
-//pin connected to led_a,b,c,d,e,f :D >>>>>>>>>>>>>>>>>>>>>>>>>>>>>lesssssssaaaa
-
+/*comment:pins connected to display2*/
 #define SSD_u8DISP2SEGA DIO_u8PIN24
 #define SSD_u8DISP2SEGB DIO_u8PIN25
 #define SSD_u8DISP2SEGC DIO_u8PIN26

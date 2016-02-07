@@ -12,29 +12,42 @@
 
 #include"delay.h"
 
-void main(void)
+int main(void)
 {
 	DIO_voidInit();
 while(1)
 {
+	SSD_voidInit();
+	Delay(30);
 	SSD_u8Display(0,0);
 	SSD_u8Display(1,0);
-	Delay(30);
+	//Delay(30);
 	SSD_u8Display(0,1);
 	SSD_u8Display(1,1);
 	Delay(30);
 	SSD_u8Display(0,2);
 	SSD_u8Display(1,2);
 	Delay(30);
+//////////////////////////
+	//SSD_u8TurnOff(0);
+	//SSD_u8TurnOff(1);
+//////////////////////////////////
 	SSD_u8Display(0,3);
 	SSD_u8Display(1,3);
 	Delay(30);
 	SSD_u8Display(0,4);
 	SSD_u8Display(1,4);
 	Delay(30);
+	//////////////////////////////
+	//SSD_u8TurnOn(0);
+	//SSD_u8TurnOn(1);
 	SSD_u8Display(0,5);
 	SSD_u8Display(1,5);
 	Delay(30);
+	SSD_u8Display(0,6);
+	SSD_u8Display(1,6);
+	Delay(30);
+
 	SSD_u8Display(0,6);
 	SSD_u8Display(1,6);
 	Delay(30);
@@ -45,8 +58,11 @@ while(1)
 	SSD_u8Display(1,8);
 	Delay(30);
 	SSD_u8Display(0,9);
+	SSD_u8Display(1,9);
 	Delay(30);
 //	SSD_u8TurnOff(0);
 	//Delay(30);
+
 }
+return 0;
 }
