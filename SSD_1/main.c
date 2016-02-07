@@ -17,7 +17,7 @@ void main(void)
 	DIO_voidInit();
 while(1)
 {
-/*	SSD_u8Display(0,0);
+	SSD_u8Display(0,0);
 	SSD_u8Display(1,0);
 	Delay(30);
 	SSD_u8Display(0,1);
@@ -35,7 +35,6 @@ while(1)
 	SSD_u8Display(0,5);
 	SSD_u8Display(1,5);
 	Delay(30);
-	*/
 	SSD_u8Display(0,6);
 	SSD_u8Display(1,6);
 	Delay(30);
@@ -45,7 +44,6 @@ while(1)
 	SSD_u8Display(0,8);
 	SSD_u8Display(1,8);
 	Delay(30);
-
 	SSD_u8Display(0,9);
 	Delay(30);
 //	SSD_u8TurnOff(0);
