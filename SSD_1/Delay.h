@@ -10,6 +10,6 @@
 #include "Delay_config.h"
 //#include "types.h"
 
-#define Delay(n) do{ u32 i; for(i=1; i <= ((n*DELAY_u32SYSCLOCK)/1000) ;i++) {  __asm__("NOP"); }  }while(0)
+#define Delay(n) do{ u32 i; for(i=1; i <= ((n*DELAY_u32SYSCLOCK)/80000) ;i++) {  __asm__("NOP"); }  }while(0)
 
 #endif /* DELAY_H_ */
