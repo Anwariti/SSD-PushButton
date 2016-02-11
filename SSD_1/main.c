@@ -10,84 +10,114 @@
 #include"SSD_interface.h"
 #include"DIO_interface.h"
 #include"delay.h"
+#include"Matrix_prog.c"
 
 #define SWITCH_u8RELEASED 0
 #define SWITCH_u8DEBOUNCING 1
 #define SWITCH_u8PRESSED 2
+///////////////////////////////////////////////////////////////
+#define SWITCH_CHECK 1
+
+#if SWITCH_CHECK==0
+#define SWITCH_FN			SwitchSingle_u8Check(11)
+#define SWITCH_LASTDELAY	Delay(3)
+#elif  SWITCH_CHECK==1
+#define SWITCH_FN			SwitchMulti_u8Check(11)
+#define SWITCH_LASTDELAY	Delay(10)
+#endif
+
+/////////////////////////////////////////////////////////////////
+
 
 u8 SwitchMulti_u8Check(u8 Copy_u8PinIndx);
 u8 SwitchSingle_u8Check(u8 Copy_u8PinIndx);
+void Segments(void);
 
 
 u8 x =10U;
+u64 counter=123;
+
+//////////////////////////////////////////////
 int main(void)
 {
 	DIO_voidInit();
 	SSD_voidInit();
 	Delay(x);
-	u64 counter=123;
-	u8 counter0,counter1,counter2,counter3;
 
 	while(1)
 {
-counter0=(counter%10);
-counter1=(counter%100)/10;
-counter2=(counter%1000)/100;
-counter3=(counter%10000)/1000;
-
-u8 yy= SwitchSingle_u8Check(11);
-
-if (yy==SWITCH_u8PRESSED)
-{
-counter++;
-}
-else{};
-
-		SSD_u8TurnOff(0);
-		SSD_u8TurnOff(1);
-		SSD_u8TurnOff(2);
-		SSD_u8TurnOff(3);
-
-		SSD_u8Display(0,counter3);
-		SSD_u8TurnOn(0);
-		Delay(10);
-
-
-
-		SSD_u8TurnOff(0);
-		SSD_u8TurnOff(1);
-		SSD_u8TurnOff(2);
-		SSD_u8TurnOff(3);
-
-		SSD_u8Display(1,counter2);
-		SSD_u8TurnOn(1);
-		Delay(10);
-
-		SSD_u8TurnOff(0);
-		SSD_u8TurnOff(1);
-		SSD_u8TurnOff(2);
-		SSD_u8TurnOff(3);
-
-		SSD_u8Display(2,counter1);
-		SSD_u8TurnOn(2);
-		Delay(10);
-
-
-		SSD_u8TurnOff(0);
-		SSD_u8TurnOff(1);
-		SSD_u8TurnOff(2);
-		SSD_u8TurnOff(3);
-
-		SSD_u8Display(3,counter0);
-		SSD_u8TurnOn(3);
-		Delay(10);
+	//	Segments();
+		Mtx_voidDisp(0);
 
 
 }
 return 0;
 }
+/////////////////////////////////////////////////////
+
+void Segments(void){
+	u8 counter0,counter1,counter2,counter3;
+	counter0=(counter%10);
+	counter1=(counter%100)/10;
+	counter2=(counter%1000)/100;
+	counter3=(counter%10000)/1000;
+/********************************************/
+//	DIO_u8WritePinVal(25,1);
+
+	u8 yy= SWITCH_FN ;  //(7ms 3shan btarga3 l al main :D)  (5ms blzabt :D )
+	//u8 yy=SWITCH_FN ;        //87.5 us blzabt :D
+
+//	DIO_u8WritePinVal(25,0);
+/*************************************/
+	if (yy==SWITCH_u8PRESSED)
+	{
+	counter++;
+	}
+	else{};
+
+			SSD_u8TurnOff(0);
+			SSD_u8TurnOff(1);
+			SSD_u8TurnOff(2);
+			SSD_u8TurnOff(3);
+
+			SSD_u8Display(0,counter3);
+			SSD_u8TurnOn(0);
+			Delay(10);
 
 
+
+			SSD_u8TurnOff(0);
+			SSD_u8TurnOff(1);
+			SSD_u8TurnOff(2);
+			SSD_u8TurnOff(3);
+
+			SSD_u8Display(1,counter2);
+			SSD_u8TurnOn(1);
+			Delay(10);
+
+			SSD_u8TurnOff(0);
+			SSD_u8TurnOff(1);
+			SSD_u8TurnOff(2);
+			SSD_u8TurnOff(3);
+
+			SSD_u8Display(2,counter1);
+			SSD_u8TurnOn(2);
+			Delay(10);
+
+
+			SSD_u8TurnOff(0);
+			SSD_u8TurnOff(1);
+			SSD_u8TurnOff(2);
+			SSD_u8TurnOff(3);
+
+			SSD_u8Display(3,counter0);
+			SSD_u8TurnOn(3);
+			SWITCH_LASTDELAY;
+
+
+}
+
+//////////////////////////////////////////////////////
 u8 SwitchMulti_u8Check(u8 Copy_u8PinIndx)
 {
 
@@ -120,8 +150,7 @@ break;
 
 return Switch_State;
 }
-
-
+///////////////////////////////////////////////////
 u8 SwitchSingle_u8Check(u8 Copy_u8PinIndx)
 {
 
@@ -134,7 +163,7 @@ switch (Switch_State)
 {
 case SWITCH_u8RELEASED:
 DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading);
-Delay(5UL);
+Delay(10UL);
 DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading2);
 if(local_PinReading==DIO_u8HIGH && local_PinReading==local_PinReading2)
 {Switch_State=SWITCH_u8DEBOUNCING;}
@@ -152,7 +181,7 @@ Switch_State=SWITCH_u8RELEASED;
 }
 return Switch_State;
  }
-
+/////////////////////////////////////////////////////////////////////////
 
 /*Delay(30);
 	SSD_u8Display(0,0);
