@@ -10,8 +10,8 @@
 #include"SSD_interface.h"
 #include"DIO_interface.h"
 #include"delay.h"
-#include"Matrix_prog.c"
 
+////////////////////////////////////////////////////////////
 #define SWITCH_u8RELEASED 0
 #define SWITCH_u8DEBOUNCING 1
 #define SWITCH_u8PRESSED 2
@@ -41,18 +41,36 @@ u64 counter=123;
 int main(void)
 {
 	DIO_voidInit();
-	SSD_voidInit();
-	Delay(x);
+
+
+//	SSD_voidInit();
+	//Delay(x);
 
 	while(1)
 {
-	//	Segments();
-		Mtx_voidDisp(0);
 
+	//	Segments();
+/***letter A****/
+DIO_u8WritePortVal(3,0b00000000);
+DIO_u8WritePortVal(2,0b00001111); //row //low //
+DIO_u8WritePortVal(3,0b00100010);   //cols //high //
+Delay(10);
+
+DIO_u8WritePortVal(3,0b00000000);
+DIO_u8WritePortVal(2,0b11010111); //row //low //
+DIO_u8WritePortVal(3,0b00010100);   //cols //high //
+Delay(10);
+
+DIO_u8WritePortVal(3,0b00000000);
+DIO_u8WritePortVal(2,0b11011011); //row //low //
+DIO_u8WritePortVal(3,0b00001000);   //cols //high //
+Delay(10);
+/********/
 
 }
 return 0;
 }
+
 /////////////////////////////////////////////////////
 
 void Segments(void){
@@ -62,12 +80,12 @@ void Segments(void){
 	counter2=(counter%1000)/100;
 	counter3=(counter%10000)/1000;
 /********************************************/
-//	DIO_u8WritePinVal(25,1);
+//	DIO_u8WritePinVal(25,1); // calculationg fn time
 
 	u8 yy= SWITCH_FN ;  //(7ms 3shan btarga3 l al main :D)  (5ms blzabt :D )
-	//u8 yy=SWITCH_FN ;        //87.5 us blzabt :D
+	//u8 yy=SWITCH_FN ;        //87.5 us blzabt :D in multi
 
-//	DIO_u8WritePinVal(25,0);
+//	DIO_u8WritePinVal(25,0); //calculating time fn
 /*************************************/
 	if (yy==SWITCH_u8PRESSED)
 	{
@@ -181,67 +199,7 @@ Switch_State=SWITCH_u8RELEASED;
 }
 return Switch_State;
  }
+
 /////////////////////////////////////////////////////////////////////////
 
-/*Delay(30);
-	SSD_u8Display(0,0);
-	SSD_u8Display(1,0);
-	//Delay(30);
-	SSD_u8Display(0,1);
-	SSD_u8Display(1,1);
-	Delay(30);
-	SSD_u8Display(0,2);
-	SSD_u8Display(1,2);
-	Delay(30);
-//////////////////////////
-	//SSD_u8TurnOff(0);
-	//SSD_u8TurnOff(1);
-//////////////////////////////////
-	SSD_u8Display(0,3);
-	SSD_u8Display(1,3);
-	Delay(30);
-	SSD_u8Display(0,4);
-	SSD_u8Display(1,4);
-	Delay(30);
-	//////////////////////////////
-	//SSD_u8TurnOn(0);
-	SSD_u8TurnOn(1);
-	SSD_u8Display(0,5);
-	SSD_u8Display(1,5);
-	Delay(30);
-	SSD_u8Display(0,6);
-	SSD_u8Display(1,6);
-	Delay(30);
 
-	SSD_u8Display(0,6);
-	SSD_u8Display(1,6);
-	Delay(30);
-	SSD_u8Display(0,7);
-	SSD_u8Display(1,7);
-	Delay(30);
-	SSD_u8Display(0,8);
-	SSD_u8Display(1,8);
-	Delay(30);
-	SSD_u8Display(0,9);
-	SSD_u8Display(1,9);
-	Delay(30);
-//	SSD_u8TurnOff(0);
-	//Delay(30);
-*/
-
-
-
-//SSD_u8TurnOff(1);
-//SSD_u8TurnOn(0);
-//SSD_u8Display(0,2);
-//SSD_u8Display(1,1);
-//Delay(25);
-//SSD_u8TurnOff(0);
-//Delay(25);
-/*
-SSD_u8TurnOff(0);
-SSD_u8TurnOn(1);
-SSD_u8Display(0,2);
-SSD_u8Display(1,1);
-*/
-//Delay(25);

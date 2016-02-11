@@ -67,6 +67,7 @@
 #define DIO_u8PIN5_INITVAL         DIO_u8LOW
 #define DIO_u8PIN6_INITVAL         DIO_u8LOW
 #define DIO_u8PIN7_INITVAL         DIO_u8LOW
+
 #define DIO_u8PIN8_INITVAL         DIO_u8LOW
 #define DIO_u8PIN9_INITVAL         DIO_u8LOW
 #define DIO_u8PIN10_INITVAL        DIO_u8LOW
@@ -75,22 +76,24 @@
 #define DIO_u8PIN13_INITVAL        DIO_u8LOW
 #define DIO_u8PIN14_INITVAL        DIO_u8LOW
 #define DIO_u8PIN15_INITVAL        DIO_u8LOW
-#define DIO_u8PIN16_INITVAL        DIO_u8LOW
-#define DIO_u8PIN17_INITVAL        DIO_u8LOW
-#define DIO_u8PIN18_INITVAL        DIO_u8LOW
-#define DIO_u8PIN19_INITVAL        DIO_u8LOW
-#define DIO_u8PIN20_INITVAL        DIO_u8LOW
-#define DIO_u8PIN21_INITVAL        DIO_u8LOW
-#define DIO_u8PIN22_INITVAL        DIO_u8LOW
-#define DIO_u8PIN23_INITVAL        DIO_u8LOW
-#define DIO_u8PIN24_INITVAL        DIO_u8LOW
-#define DIO_u8PIN25_INITVAL        DIO_u8LOW
-#define DIO_u8PIN26_INITVAL        DIO_u8LOW
-#define DIO_u8PIN27_INITVAL        DIO_u8LOW
-#define DIO_u8PIN28_INITVAL        DIO_u8LOW
-#define DIO_u8PIN29_INITVAL        DIO_u8LOW
-#define DIO_u8PIN30_INITVAL        DIO_u8LOW
-#define DIO_u8PIN31_INITVAL        DIO_u8LOW
+
+#define DIO_u8PIN16_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN17_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN18_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN19_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN20_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN21_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN22_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN23_INITVAL        DIO_u8HIGH
+
+#define DIO_u8PIN24_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN25_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN26_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN27_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN28_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN29_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN30_INITVAL        DIO_u8HIGH
+#define DIO_u8PIN31_INITVAL        DIO_u8HIGH
 
 
 #endif /* DIO_CONFIG_H_ */
