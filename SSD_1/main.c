@@ -1,4 +1,4 @@
-/*
+/*`
  * main.c
  *
  *  Created on: Feb 6, 2016
@@ -15,8 +15,15 @@
 #define SWITCH_u8RELEASED 0
 #define SWITCH_u8DEBOUNCING 1
 #define SWITCH_u8PRESSED 2
+#define GETBIT(Reg,Bit) (((Reg)>>Bit)&0x01)
+
+#define DS_pin 24
+#define sh_clk 26
+#define otpt_pin 25
+
+
 ///////////////////////////////////////////////////////////////
-#define SWITCH_CHECK 1
+#define SWITCH_CHECK 0
 
 #if SWITCH_CHECK==0
 #define SWITCH_FN			SwitchSingle_u8Check(11)
@@ -36,12 +43,20 @@ void letterA(void);
 void letterN(void);
 void letterR(void);
 void letterW(void);
+void shift(u8 R,u8 C);
 
 
-
+void Segments(void);
 ///////////////////////////////////////////////////////////
 u8 x =10U;
 u64 counter=123;
+u8 rows[]={0b11111011,0b11110111,0b11101111,0b11011111,0b10111111,0b01111111};
+
+u8 cols[][6]=
+		{{0b00011000,0b00100100,0b01000010,0b01111110,0b01000010,0b01000010},
+		{0b01000010,0b01000110,0b01001010,0b01010010,0b01100010,0b01000010},
+		{0b01000010,0b01000010,0b01000010,0b01011010,0b01100110,0b01000010},
+		{0b00011110,0b00100010,0b00100010,0b00011110,0b00010010,0b00100010}};
 
 void (*p[5])(void);
 
@@ -49,32 +64,30 @@ void (*p[5])(void);
 //////////////////////////////////////////////
 int main(void)
 {
-	DIO_voidInit();
+DIO_voidInit();
 SSD_voidInit();
 p[0] = letterA;
 p[1] = letterN;
 p[2] = letterW;
 p[3] = letterA;
 p[4] = letterR;
-	//Delay(x);
+DIO_u8WritePinVal(otpt_pin,0);  // output enable
+DIO_u8WritePinVal(sh_clk,0);  // output enable
+
 
 	while(1)
 {
 
-
-
-		DIO_u8WritePortVal(3,0b00000000);
-	Delay(1000UL);
-	for(u8 ii=0;ii<5;ii++)
-	{
-		DIO_u8WritePortVal(3,0b00000000);
-		Delay(1000UL);
-		for(u8 i=1;i<50;i++)
-	{
-	(*p[ii])();
-	}
-		}
-
+	Segments();
+//for(u8 ii=0;ii<5;ii++)
+//		{
+//		DIO_u8WritePinVal(16,1);
+//for(u8 i=0;i<50;i++)
+//{
+//		(*p[0])();
+//}
+//	DIO_u8WritePinVal(16,0);
+//}
 }
 return 0;
 }
@@ -90,15 +103,15 @@ void Segments(void){
 /********************************************/
 //	DIO_u8WritePinVal(25,1); // calculationg fn time
 
-//	u8 yy= SWITCH_FN ;  //(7ms 3shan btarga3 l al main :D)  (5ms blzabt :D )  //87.5 us blzabt :D in multi
+///	u8 yy= SWITCH_FN ;  //(7ms 3shan btarga3 l al main :D)  (5ms blzabt :D )  //87.5 us blzabt :D in multi
 
 //	DIO_u8WritePinVal(25,0); //calculating time fn
 /*************************************/
-	//if (yy==SWITCH_u8PRESSED)
+//	if (yy==SWITCH_u8PRESSED)
 //	{
-	//counter++;
+//	counter++;
 //	}
-	//else{};
+//	else{};
 
 			SSD_u8TurnOff(0);
 			SSD_u8TurnOff(1);
@@ -107,8 +120,12 @@ void Segments(void){
 
 			SSD_u8Display(0,counter3);
 			SSD_u8TurnOn(0);
-			Delay(10);
+			//Delay(10);
 
+			for(u8 i=0;i<10;i++)
+			{
+				(*p[0])();
+			}
 
 
 			SSD_u8TurnOff(0);
@@ -118,7 +135,16 @@ void Segments(void){
 
 			SSD_u8Display(1,counter2);
 			SSD_u8TurnOn(1);
-			Delay(10);
+//			Delay(10);
+
+			for(u8 i=0;i<10;i++)
+			{
+					(*p[1])();
+			}
+
+
+
+
 
 			SSD_u8TurnOff(0);
 			SSD_u8TurnOff(1);
@@ -127,7 +153,12 @@ void Segments(void){
 
 			SSD_u8Display(2,counter1);
 			SSD_u8TurnOn(2);
-			Delay(10);
+	//		Delay(10);
+
+			for(u8 i=0;i<10;i++)
+			{
+					(*p[2])();
+		}
 
 
 			SSD_u8TurnOff(0);
@@ -137,7 +168,18 @@ void Segments(void){
 
 			SSD_u8Display(3,counter0);
 			SSD_u8TurnOn(3);
-			Delay(10);
+			//Delay(10);
+
+						for(u8 i=0;i<10;i++)
+						{
+								(*p[3])();
+						}
+
+					for(u8 i=0;i<10;i++)
+					{
+								(*p[4])();
+						}
+
 
 //			SWITCH_LASTDELAY;
 }
@@ -148,7 +190,6 @@ u8 SwitchMulti_u8Check(u8 Copy_u8PinIndx)
 
 static u8 Switch_State=SWITCH_u8RELEASED;
 static u8 local_PinReading=0;
-u8 local_PinReading2=0;
 switch (Switch_State)
 {
 case SWITCH_u8RELEASED:
@@ -161,18 +202,17 @@ break;
 
 case SWITCH_u8DEBOUNCING:
 Delay(50UL);
-DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading2);
-if(local_PinReading2==DIO_u8HIGH)
+DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading);
+if(local_PinReading==DIO_u8HIGH)
 {Switch_State=SWITCH_u8PRESSED;}
 else
 {Switch_State=SWITCH_u8RELEASED;}
 break;
 
 case SWITCH_u8PRESSED:
-Switch_State=SWITCH_u8RELEASED;
+	Switch_State=SWITCH_u8RELEASED;
 break;
 }
-
 return Switch_State;
 }
 ///////////////////////////////////////////////////
@@ -182,7 +222,6 @@ u8 SwitchSingle_u8Check(u8 Copy_u8PinIndx)
 static u8 Switch_State=SWITCH_u8RELEASED;
 u8 local_PinReading=0;
 u8 local_PinReading2=0;
-u8 local_PinReading3=0;
 
 switch (Switch_State)
 {
@@ -196,8 +235,8 @@ else {Switch_State=SWITCH_u8RELEASED;}
 break;
 
 case SWITCH_u8DEBOUNCING:
-DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading3);
-if(local_PinReading3==DIO_u8HIGH){Switch_State=SWITCH_u8DEBOUNCING;}
+DIO_u8ReadPinVal(Copy_u8PinIndx,&local_PinReading);
+if(local_PinReading==DIO_u8HIGH){Switch_State=SWITCH_u8DEBOUNCING;}
 else {Switch_State=SWITCH_u8PRESSED;}
 break;
 
@@ -211,43 +250,96 @@ return Switch_State;
 void letterA(void)
 {
 	/***letter A****/
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b11111011); //row //low //
-	DIO_u8WritePortVal(3,0b00011000);   //cols //high //
-	Delay(5);
 
 
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b11110111); //row //low //
-	DIO_u8WritePortVal(3,0b00100100);   //cols //high //
-	Delay(5);
+	 for(u8 i=0;i<6;i++)
+	 {
+		// shift(rows[i],cols[i]);
 
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b11101111); //row //low //
-	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
-	Delay(5);
+		u8 R=rows[i];
+		u8 C=cols[0][i];
+		DIO_u8WritePinVal(otpt_pin,0);  //output enable
+			for(s8 i=0;i<8;i++)
+		{
+		DIO_u8WritePinVal(DS_pin,GETBIT(R,i)); // rows
+		DIO_u8WritePinVal(sh_clk,0); ///clk
+		DIO_u8WritePinVal(sh_clk,1); //clk
+		}
 
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b11011111); //row //low //
-	DIO_u8WritePortVal(3,0b01111110);   //cols //high //
-	Delay(5);
+		for(s8 i=0;i<8;i++)
+		{
+		DIO_u8WritePinVal(DS_pin,GETBIT(C,i)); //columns
+		DIO_u8WritePinVal(sh_clk,0); //clk
+		DIO_u8WritePinVal(sh_clk,1); //clk
+		}
+		DIO_u8WritePinVal(otpt_pin,1);  // output enable
+	 }
 
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b10111111); //row //low //
-	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
-	Delay(5);
+	/*DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b11111011); //row //low //
+	DIO_u8WritePortVal(2,0b00011000);   //cols //high //
+	Delay(1);
 
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
-	DIO_u8WritePortVal(2,0b01111111); //row //low //
-	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
-	Delay(5);
+
+	DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b11110111); //row //low //
+	DIO_u8WritePortVal(2,0b00100100);   //cols //high //
+	Delay(1);
+
+	DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b11101111); //row //low //
+	DIO_u8WritePortVal(2,0b01000010);   //cols //high //
+	Delay(1);
+
+	DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b11011111); //row //low //
+	DIO_u8WritePortVal(2,0b01111110);   //cols //high //
+	Delay(1);
+
+	DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b10111111); //row //low //
+	DIO_u8WritePortVal(2,0b01000010);   //cols //high //
+	Delay(1);
+
+	DIO_u8WritePortVal(2,0b00000000); //switch all off
+	DIO_u8WritePortVal(3,0b01111111); //row //low //
+	DIO_u8WritePortVal(2,0b01000010);   //cols //high //
+	Delay(1);*/
 
 }
 ////////////////////////////////////////////////////////////////////
 void letterN(void)
 {
-	/***letter A****/
-	DIO_u8WritePortVal(3,0b00000000); //switch all off
+
+		 for(u8 i=0;i<6;i++)
+		 {
+			 //shift(rows[i],cols[i]);
+			 //Delay(10);
+
+				u8 R=rows[i];
+				u8 C=cols[1][i];
+				DIO_u8WritePinVal(otpt_pin,0);  //output enable
+					for(s8 i=0;i<8;i++)
+				{
+				DIO_u8WritePinVal(DS_pin,GETBIT(R,i)); // rows
+				DIO_u8WritePinVal(sh_clk,0); ///clk
+				DIO_u8WritePinVal(sh_clk,1); //clk
+				}
+
+				for(s8 i=0;i<8;i++)
+				{
+				DIO_u8WritePinVal(DS_pin,GETBIT(C,i)); //columns
+				DIO_u8WritePinVal(sh_clk,0); //clk
+				DIO_u8WritePinVal(sh_clk,1); //clk
+				}
+				DIO_u8WritePinVal(otpt_pin,1);  // output enable
+
+
+		 }
+
+	  /***letter N****/
+	/*
+	  DIO_u8WritePortVal(3,0b00000000); //switch all off
 	DIO_u8WritePortVal(2,0b11111011); //row //low //
 	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
 	Delay(5);
@@ -277,11 +369,38 @@ void letterN(void)
 	DIO_u8WritePortVal(2,0b01111111); //row //low //
 	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
 	Delay(5);
+*/
 }
 ////////////////////////////////////////////////////////////
 void letterR(void)
 {
-	/***letter A****/
+	/***letter R****/
+
+	 for(u8 i=0;i<6;i++)
+	 {
+		 //shift(rows[i],cols[i]);
+		 //Delay(10);
+
+			u8 R=rows[i];
+			u8 C=cols[3][i];
+			DIO_u8WritePinVal(otpt_pin,0);  //output enable
+				for(s8 i=0;i<8;i++)
+			{
+			DIO_u8WritePinVal(DS_pin,GETBIT(R,i)); // rows
+			DIO_u8WritePinVal(sh_clk,0); ///clk
+			DIO_u8WritePinVal(sh_clk,1); //clk
+			}
+
+			for(s8 i=0;i<8;i++)
+			{
+			DIO_u8WritePinVal(DS_pin,GETBIT(C,i)); //columns
+			DIO_u8WritePinVal(sh_clk,0); //clk
+			DIO_u8WritePinVal(sh_clk,1); //clk
+			}
+			DIO_u8WritePinVal(otpt_pin,1);  // output enable
+
+	 }
+	 /*
 	DIO_u8WritePortVal(3,0b00000000); //switch all off
 	DIO_u8WritePortVal(2,0b11111011); //row //low //
 	DIO_u8WritePortVal(3,0b00011110);   //cols //high //
@@ -315,11 +434,37 @@ void letterR(void)
 	DIO_u8WritePortVal(3,0b00100010);   //cols //high //
 
 	Delay(5);
+*/
 }
 
 void letterW(void)
 {
-	/***letter A****/
+	/***letter W****/
+
+
+	 for(u8 i=0;i<6;i++)
+	 {
+		// shift(rows[i],cols[i]);
+		 //Delay(10);
+			u8 R=rows[i];
+			u8 C=cols[2][i];
+			DIO_u8WritePinVal(otpt_pin,0);  //output enable
+				for(s8 i=0;i<8;i++)
+			{
+			DIO_u8WritePinVal(DS_pin,GETBIT(R,i)); // rows
+			DIO_u8WritePinVal(sh_clk,0); ///clk
+			DIO_u8WritePinVal(sh_clk,1); //clk
+			}
+
+			for(s8 i=0;i<8;i++)
+			{
+			DIO_u8WritePinVal(DS_pin,GETBIT(C,i)); //columns
+			DIO_u8WritePinVal(sh_clk,0); //clk
+			DIO_u8WritePinVal(sh_clk,1); //clk
+			}
+			DIO_u8WritePinVal(otpt_pin,1);  // output enable
+	 }
+	 /*
 	DIO_u8WritePortVal(3,0b00000000); //switch all off
 	DIO_u8WritePortVal(2,0b11111011); //row //low //
 	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
@@ -353,4 +498,30 @@ void letterW(void)
 	DIO_u8WritePortVal(3,0b01000010);   //cols //high //
 
 	Delay(5);
+*/
 }
+///////////////////////////////////////////////////////////////////////
+void shift(u8 R,u8 C)
+{
+
+	DIO_u8WritePinVal(otpt_pin,0);  //output enable
+	for(s8 i=0;i<8;i++)
+{
+DIO_u8WritePinVal(DS_pin,GETBIT(R,i)); // rows
+DIO_u8WritePinVal(sh_clk,0); ///clk
+DIO_u8WritePinVal(sh_clk,1); //clk
+}
+
+for(s8 i=0;i<8;i++)
+{
+DIO_u8WritePinVal(DS_pin,GETBIT(C,i)); //columns
+DIO_u8WritePinVal(sh_clk,0); //clk
+DIO_u8WritePinVal(sh_clk,1); //clk
+}
+DIO_u8WritePinVal(otpt_pin,1);  // output enable
+}
+
+
+
+
+
